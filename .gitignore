@@ -11,3 +11,19 @@
 /build
 /captures
 .externalNativeBuild
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Freeline
+freeline.py
+freeline/
+freeline_project_description.json
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md
+>>>>>>> c85de38f44cd363833e2f4404cb34fa6b9c31407
