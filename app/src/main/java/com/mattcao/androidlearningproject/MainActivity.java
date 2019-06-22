@@ -7,21 +7,9 @@ import android.os.Bundle;
 
 import com.mattcao.androidlearningproject.ui.CrimeFragment;
 
-public class MainActivity extends AppCompatActivity {
-    private FragmentManager mFragmentManager;
-
+public class MainActivity extends SingleFragmentActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mFragmentManager = getSupportFragmentManager();
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
-            fragment = new CrimeFragment();
-        }
-        mFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
+    protected Fragment createFragment() {
+        return new CrimeFragment();
     }
 }
