@@ -1,6 +1,7 @@
 package com.mattcao.androidlearningproject;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mattcao.androidlearningproject.databinding.FragmentCrimeListBinding;
+import com.mattcao.androidlearningproject.databinding.ListItemCrimeBinding;
 import com.mattcao.androidlearningproject.entity.Crime;
 import com.mattcao.androidlearningproject.entity.CrimeLab;
 
@@ -22,6 +25,7 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private FragmentCrimeListBinding mBinding;
     private CrimeAdapter mCrimeAdapter;
+    private ListItemCrimeBinding mListItemCrimeBinding;
 
     @Nullable
     @Override
@@ -42,8 +46,19 @@ public class CrimeListFragment extends Fragment {
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder {
+        private Crime mCrime;
+        private TextView mTitleTextView;
+        private TextView mDateTextView;
+
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
+            mListItemCrimeBinding = DataBindingUtil.inflate(inflater, R.layout.list_item_crime, parent, false);
+        }
+
+        public void bind(Crime crime) {
+            mCrime = crime;
+            mListItemCrimeBinding.crimeDate.setText(mCrime.getDate().toString());
+            mListItemCrimeBinding.crimeTitle.setText(mCrime.getTitle());
         }
     }
 
@@ -64,7 +79,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull CrimeHolder crimeHolder, int i) {
-
+            Crime crime = mCrimes.get(i);
+            crimeHolder.bind(crime);
         }
 
         @Override
