@@ -1,20 +1,18 @@
 package com.mattcao.androidlearningproject;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mattcao.androidlearningproject.databinding.FragmentCrimeListBinding;
 import com.mattcao.androidlearningproject.databinding.ListItemCrimeBinding;
@@ -64,7 +62,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getContext(), "Clicked " + mCrime.getTitle(), Toast.LENGTH_SHORT).show();
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            startActivity(intent);
         }
 
         public void bind(Crime crime) {
@@ -72,7 +71,7 @@ public class CrimeListFragment extends Fragment {
             //mListItemCrimeBinding.crimeDate.setText(mCrime.getDate().toString());
             //mListItemCrimeBinding.crimeTitle.setText(mCrime.getTitle());
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(mCrime.getDate());
             mCirmeSolvedImageView.setVisibility(mCrime.isSolved() ? View.VISIBLE : View.GONE);
         }
     }

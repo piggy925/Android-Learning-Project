@@ -1,7 +1,6 @@
-package com.mattcao.androidlearningproject.ui;
+package com.mattcao.androidlearningproject;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.mattcao.androidlearningproject.R;
 import com.mattcao.androidlearningproject.databinding.FragmentCrimeBinding;
 import com.mattcao.androidlearningproject.entity.Crime;
+import com.mattcao.androidlearningproject.entity.CrimeLab;
+
+import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
     private Crime mCrime;
@@ -24,7 +25,8 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        mCrime = CrimeLab.getCrimeLab(getActivity()).getCrime(crimeId);
     }
 
     @Nullable
@@ -32,9 +34,12 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
 
-        mBinding.crimeDateButton.setText(mCrime.getDate().toString());
+        mBinding.crimeTitleEditText.setText(mCrime.getTitle());
+
+        mBinding.crimeDateButton.setText(mCrime.getDate());
         mBinding.crimeDateButton.setEnabled(false);
 
+        mBinding.crimeSolvedCheckBox.setChecked(mCrime.isSolved());
         mBinding.crimeTitleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
