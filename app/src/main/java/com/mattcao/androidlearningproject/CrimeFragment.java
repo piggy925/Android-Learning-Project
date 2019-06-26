@@ -19,13 +19,22 @@ import com.mattcao.androidlearningproject.entity.CrimeLab;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
+    private static final String CRIME_ID = "CRIME_ID";
     private Crime mCrime;
     private FragmentCrimeBinding mBinding;
+
+    public static Fragment newInstance(UUID uuid) {
+        Bundle args = new Bundle();
+        args.putSerializable(CRIME_ID, uuid);
+        CrimeFragment crimeFragment = new CrimeFragment();
+        crimeFragment.setArguments(args);
+        return crimeFragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        UUID crimeId = (UUID) getArguments().getSerializable(CRIME_ID);
         mCrime = CrimeLab.getCrimeLab(getActivity()).getCrime(crimeId);
     }
 
