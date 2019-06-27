@@ -43,6 +43,11 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
 
+        initUI();
+        return mBinding.getRoot();
+    }
+
+    private void initUI() {
         mBinding.crimeTitleEditText.setText(mCrime.getTitle());
 
         mBinding.crimeDateButton.setText(mCrime.getDate());
@@ -72,7 +77,5 @@ public class CrimeFragment extends Fragment {
                 mCrime.setSolved(isChecked);
             }
         });
-
-        return mBinding.getRoot();
     }
 }
