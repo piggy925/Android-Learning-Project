@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,10 +17,14 @@ import com.mattcao.androidlearningproject.databinding.FragmentCrimeBinding;
 import com.mattcao.androidlearningproject.entity.Crime;
 import com.mattcao.androidlearningproject.entity.CrimeLab;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
     private static final String CRIME_ID = "CRIME_ID";
+    private static final String CRIME_DIALOG = "CRIME_DIALOG";
+
     private Crime mCrime;
     private FragmentCrimeBinding mBinding;
 
@@ -50,8 +55,18 @@ public class CrimeFragment extends Fragment {
     private void initUI() {
         mBinding.crimeTitleEditText.setText(mCrime.getTitle());
 
-        mBinding.crimeDateButton.setText(mCrime.getDate());
-        mBinding.crimeDateButton.setEnabled(false);
+        SimpleDateFormat df = new SimpleDateFormat("E, MM dd, yyyy");
+        mBinding.crimeDateButton.setText(df.format(mCrime.getDate()));
+        mBinding.crimeDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                if (manager != null) {
+                    DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                    dialog.show(manager, CRIME_DIALOG);
+                }
+            }
+        });
 
         mBinding.crimeSolvedCheckBox.setChecked(mCrime.isSolved());
         mBinding.crimeTitleEditText.addTextChangedListener(new TextWatcher() {

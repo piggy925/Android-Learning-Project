@@ -7,14 +7,12 @@ import java.util.UUID;
 public class Crime {
     private UUID mId;
     private String mTitle;
-    private String mDate;
+    private Date mDate;
     private boolean mSolved;
 
     public Crime() {
         mId = UUID.randomUUID();
-
-        SimpleDateFormat df = new SimpleDateFormat("E, MM dd, yyyy");
-        mDate = df.format(new Date());
+        mDate = new Date();
     }
 
     public UUID getId() {
@@ -29,11 +27,11 @@ public class Crime {
         mTitle = title;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return mDate;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         mDate = date;
     }
 
