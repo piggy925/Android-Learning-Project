@@ -82,6 +82,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mBinding.crimeTitleTextView.setText(s.toString());
+                mCrime.setTitle(s.toString());
             }
 
             @Override
