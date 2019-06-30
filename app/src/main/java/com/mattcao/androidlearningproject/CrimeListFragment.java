@@ -15,17 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mattcao.androidlearningproject.databinding.FragmentCrimeListBinding;
-import com.mattcao.androidlearningproject.databinding.ListItemCrimeBinding;
 import com.mattcao.androidlearningproject.entity.Crime;
 import com.mattcao.androidlearningproject.entity.CrimeLab;
+import com.mattcao.androidlearningproject.util.DateUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private FragmentCrimeListBinding mBinding;
     private CrimeAdapter mCrimeAdapter;
-    private ListItemCrimeBinding mListItemCrimeBinding;
 
     @Nullable
     @Override
@@ -81,7 +81,9 @@ public class CrimeListFragment extends Fragment {
             //mListItemCrimeBinding.crimeDate.setText(mCrime.getDate().toString());
             //mListItemCrimeBinding.crimeTitle.setText(mCrime.getTitle());
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate());
+
+            mDateTextView.setText(DateUtil.formatDate(mCrime.getDate()));
+
             mCrimeSolvedImageView.setVisibility(mCrime.isSolved() ? View.VISIBLE : View.GONE);
         }
     }

@@ -1,5 +1,7 @@
 package com.mattcao.androidlearningproject;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.widget.CompoundButton;
 import com.mattcao.androidlearningproject.databinding.FragmentCrimeBinding;
 import com.mattcao.androidlearningproject.entity.Crime;
 import com.mattcao.androidlearningproject.entity.CrimeLab;
+import com.mattcao.androidlearningproject.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +27,7 @@ import java.util.UUID;
 public class CrimeFragment extends Fragment {
     private static final String CRIME_ID = "CRIME_ID";
     private static final String CRIME_DIALOG = "CRIME_DIALOG";
+    private static final int DATE_REQUEST_CODE = 0;
 
     private Crime mCrime;
     private FragmentCrimeBinding mBinding;
@@ -55,14 +59,14 @@ public class CrimeFragment extends Fragment {
     private void initUI() {
         mBinding.crimeTitleEditText.setText(mCrime.getTitle());
 
-        SimpleDateFormat df = new SimpleDateFormat("E, MM dd, yyyy");
-        mBinding.crimeDateButton.setText(df.format(mCrime.getDate()));
+        mBinding.crimeDateButton.setText(DateUtil.formatDate(mCrime.getDate()));
         mBinding.crimeDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
                 if (manager != null) {
                     DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                    dialog.setTargetFragment(CrimeFragment.this, DATE_REQUEST_CODE);
                     dialog.show(manager, CRIME_DIALOG);
                 }
             }
@@ -92,5 +96,19 @@ public class CrimeFragment extends Fragment {
                 mCrime.setSolved(isChecked);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == DATE_REQUEST_CODE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            mBinding.crimeDateButton.setText(DateUtil.formatDate(mCrime.getDate()));
+        }
     }
 }
