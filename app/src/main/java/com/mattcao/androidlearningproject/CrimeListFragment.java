@@ -114,13 +114,19 @@ public class CrimeListFragment extends Fragment {
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.getCrimeLab(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
-        if (mCrimeAdapter == null) {
-            mCrimeAdapter = new CrimeAdapter(crimes);
-            mRecyclerView.setAdapter(mCrimeAdapter);
+        if (crimes.size() == 0) {
+            mBinding.noRecordsTextView.setVisibility(View.VISIBLE);
+            mBinding.recyclerCrimeView.setVisibility(View.GONE);
         } else {
-            mCrimeAdapter.notifyDataSetChanged();
+            mBinding.noRecordsTextView.setVisibility(View.GONE);
+            mBinding.recyclerCrimeView.setVisibility(View.VISIBLE);
+            if (mCrimeAdapter == null) {
+                mCrimeAdapter = new CrimeAdapter(crimes);
+                mRecyclerView.setAdapter(mCrimeAdapter);
+            } else {
+                mCrimeAdapter.notifyDataSetChanged();
+            }
         }
-
         updateTitle();
     }
 
