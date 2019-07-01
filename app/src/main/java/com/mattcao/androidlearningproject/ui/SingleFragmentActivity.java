@@ -20,8 +20,12 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         if (fragment == null) {
             fragment = createFragment();
         }
-        mFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit();
+
+        //解决旋转屏幕时报错： java.lang.IllegalStateException: Fragment already added
+        if (!fragment.isAdded()) {
+            mFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit();
+        }
     }
 }
