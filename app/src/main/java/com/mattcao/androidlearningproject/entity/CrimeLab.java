@@ -1,6 +1,9 @@
 package com.mattcao.androidlearningproject.entity;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.mattcao.androidlearningproject.util.CrimeBaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +11,9 @@ import java.util.UUID;
 
 public class CrimeLab {
     private static CrimeLab sCrimeLab;
+    private Context mContext;
+    private SQLiteDatabase mSQLiteDatabase;
+
 
     private List<Crime> mCrimes;
 
@@ -23,6 +29,8 @@ public class CrimeLab {
     }
 
     private CrimeLab(Context context) {
+        mContext = context.getApplicationContext();
+        mSQLiteDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
         mCrimes = new ArrayList<>();
     }
 
