@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -124,6 +125,7 @@ public class CrimeListFragment extends Fragment {
                 mCrimeAdapter = new CrimeAdapter(crimes);
                 mRecyclerView.setAdapter(mCrimeAdapter);
             } else {
+                mCrimeAdapter.setCrimes(crimes);
                 mCrimeAdapter.notifyDataSetChanged();
             }
         }
@@ -143,6 +145,14 @@ public class CrimeListFragment extends Fragment {
             mDateTextView = itemView.findViewById(R.id.crime_date);
             mCrimeSolvedImageView = itemView.findViewById(R.id.crime_solved_image_view);
             itemView.setOnClickListener(this);
+
+            itemView.findViewById(R.id.delete_crime_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CrimeLab.getCrimeLab(getActivity()).deleteCrime(mCrime);
+                    updateUI();
+                }
+            });
         }
 
         @Override
@@ -186,6 +196,10 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
         }
     }
 }

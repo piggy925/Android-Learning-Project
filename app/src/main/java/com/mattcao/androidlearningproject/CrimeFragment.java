@@ -47,6 +47,13 @@ public class CrimeFragment extends Fragment {
         mCrime = CrimeLab.getCrimeLab(getActivity()).getCrime(crimeId);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.getCrimeLab(getActivity())
+                .updateCrime(mCrime);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
