@@ -24,6 +24,7 @@ import com.mattcao.androidlearningproject.entity.Crime;
 import com.mattcao.androidlearningproject.entity.CrimeLab;
 import com.mattcao.androidlearningproject.util.DateUtil;
 
+import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
     private FragmentCrimeBinding mBinding;
+    private File mCrimePhoto;
 
     public static Fragment newInstance(UUID uuid) {
         Bundle args = new Bundle();
@@ -61,6 +63,7 @@ public class CrimeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID crimeId = (UUID) getArguments().getSerializable(CRIME_ID);
         mCrime = CrimeLab.getCrimeLab(getActivity()).getCrime(crimeId);
+        mCrimePhoto = CrimeLab.getCrimeLab(getActivity()).getPhotoFile(mCrime);
     }
 
     @Override

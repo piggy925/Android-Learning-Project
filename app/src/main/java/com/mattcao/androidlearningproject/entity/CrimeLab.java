@@ -9,6 +9,7 @@ import com.mattcao.androidlearningproject.database.CrimeCursorWrapper;
 import com.mattcao.androidlearningproject.database.CrimeDbSchema.CrimeTable;
 import com.mattcao.androidlearningproject.util.CrimeBaseHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,11 @@ public class CrimeLab {
             sCrimeLab = new CrimeLab(context);
         }
         return sCrimeLab;
+    }
+
+    public File getPhotoFile(Crime crime) {
+        File fileDir = mContext.getFilesDir();
+        return new File(fileDir, crime.getPhotoFileName());
     }
 
     private static ContentValues getContentValues(Crime crime) {
