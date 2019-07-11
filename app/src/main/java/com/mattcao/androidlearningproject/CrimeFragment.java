@@ -3,15 +3,18 @@ package com.mattcao.androidlearningproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ import com.mattcao.androidlearningproject.util.DateUtil;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -33,6 +37,7 @@ public class CrimeFragment extends Fragment {
     private static final String CRIME_DIALOG = "CRIME_DIALOG";
     private static final int DATE_REQUEST_CODE = 0;
     private static final int PICK_CONTACT_CODE = 1;
+    private static final int CRIME_PHOTO_CODE = 2;
 
     private Crime mCrime;
     private FragmentCrimeBinding mBinding;
@@ -83,7 +88,29 @@ public class CrimeFragment extends Fragment {
     }
 
     private void initUI() {
+        PackageManager packageManager = getActivity().getPackageManager();
+
         mBinding.crimeTitleEditText.setText(mCrime.getTitle());
+
+        final Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //判断设备上是否有储存照片的地方以及是否有照相应用
+        boolean canTakePhoto = (mCrimePhoto != null && photoIntent.resolveActivity(packageManager) != null);
+        mBinding.crimeCameraButton.setEnabled(canTakePhoto);
+        mBinding.crimeCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "com.mattcao.androidlearningproject.fileprovider", mCrimePhoto);
+                photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                List<ResolveInfo> cameraActivities = getActivity().getPackageManager().queryIntentActivities(photoIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo activity : cameraActivities) {
+                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+                startActivityForResult(photoIntent, CRIME_PHOTO_CODE);
+            }
+        });
 
         mBinding.crimeDateButton.setText(DateUtil.formatDate(mCrime.getDate()));
         mBinding.crimeDateButton.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +149,6 @@ public class CrimeFragment extends Fragment {
             mBinding.crimeSuspectButton.setText(mCrime.getSuspect());
         }
 
-        PackageManager packageManager = getActivity().getPackageManager();
         if (packageManager.resolveActivity(pickContactIntent,
                 PackageManager.MATCH_DEFAULT_ONLY) == null) {
             mBinding.crimeSuspectButton.setEnabled(false);
