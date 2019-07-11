@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -26,6 +27,7 @@ import com.mattcao.androidlearningproject.databinding.FragmentCrimeBinding;
 import com.mattcao.androidlearningproject.entity.Crime;
 import com.mattcao.androidlearningproject.entity.CrimeLab;
 import com.mattcao.androidlearningproject.util.DateUtil;
+import com.mattcao.androidlearningproject.util.PictureUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -112,6 +114,9 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        //将照片转换成缩略图显示在ImageView上
+        updatePhotoView();
+
         mBinding.crimeDateButton.setText(DateUtil.formatDate(mCrime.getDate()));
         mBinding.crimeDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +186,15 @@ public class CrimeFragment extends Fragment {
         });
     }
 
+    private void updatePhotoView() {
+        if (mCrimePhoto == null || !mCrimePhoto.exists()) {
+            mBinding.crimePhotoImageView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaleBitmap(mCrimePhoto.getPath(), getActivity());
+            mBinding.crimePhotoImageView.setImageBitmap(bitmap);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -208,6 +222,12 @@ public class CrimeFragment extends Fragment {
             } finally {
                 c.close();
             }
+        } else if (requestCode == CRIME_PHOTO_CODE) {
+            Uri uri = FileProvider.getUriForFile(getActivity(), "com.mattcao.androidlearningproject.fileprovider", mCrimePhoto);
+
+            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            updatePhotoView();
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.mattcao.androidlearningproject.util;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 
 public class PictureUtils {
     public static Bitmap getScaleBitmap(String path, int destWidth, int destHeight) {
@@ -24,5 +26,12 @@ public class PictureUtils {
         options.inSampleSize = inSampleSize;
 
         return BitmapFactory.decodeFile(path, options);
+    }
+
+    public static Bitmap getScaleBitmap(String path, Activity activity) {
+        Point size = new Point();
+        activity.getWindowManager().getDefaultDisplay().getSize(size);
+
+        return getScaleBitmap(path, size.x, size.y);
     }
 }
